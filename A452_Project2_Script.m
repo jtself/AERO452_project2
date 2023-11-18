@@ -11,21 +11,24 @@ Due date:
 % Housekeeping
 clear all; close all; clc;
 
+% Add Path
 addpath("Functions\")
+
+% Governing Constants
+re = 6378;                 % km
+mu = 398600;               % km3/s2
+wEarth = [0;0;72.9211e-6]; % rad/s
+muSun = 132.712e9;         % km3/s2
 
 %% Section 1
 
-% Governing Constants
-rearth = 6378; % km
-mu = 398600; % km3/s2
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TLE Input (RANDOM TLE- GEO from other Proj)
-SC.init.UTC = "02 October 2023, 05:38:01"; % UTC
+SC.init.UTC = "02/10/2023 05:38:01"; % UTC
 SC.init.ecc = 0.000001016; % actual ecc but we must change it to zero
 SC.init.inc = deg2rad(0.0009);               % rad
-SC.init.rp = 35782 + rearth;                 % km
-SC.init.ra = 35791 + rearth;                 % km
+SC.init.rp = 35782 + re;                 % km
+SC.init.ra = 35791 + re;                 % km
 SC.init.raan = deg2rad(246.2601);            % rad
 SC.init.w = deg2rad(273.8346);               % rad
 SC.init.revperday = 1.00269599;              % rev/day
@@ -35,6 +38,7 @@ SC.init.Me = deg2rad(199.9092);              % rad
 SC.init.a = 0.5*(SC.init.rp + SC.init.ra);             % km
 SC.init.T = ( (2*pi) / (sqrt(mu)) ) * SC.init.a^(3/2); % sec
 SC.init.n = SC.init.revperday*(2*pi/(24*60*60));       % rad/sec
+SC.init.jd = juliandate(datetime(SC.init.UTC,"Format","MM/dd/uuuu HH:mm:ss"));
 
 SC.init.E = newtonsKepler(SC.init.Me, SC.init.ecc);
 SC.init.TA = 2*atan((tan(SC.init.E/2))...
@@ -46,6 +50,20 @@ SC.init.h = findh(SC.init.a, mu, SC.init.ecc, SC.init.TA);
     SC.init.inc,SC.init.raan,SC.init.w,SC.init.TA,mu);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Need to model EXP Drag, J2-J6, Sun as extra Body, and SRP
+
+% RANDOM PARAMETERS
+diameter = 1;          % m
+mass = 100;            % kg
+area = (1/(1000^2))*pi*(diameter/2)^2; % km
+Cd = 2.2;
+tfinal = 50*24*60*60; % RANDOM 
+
+
+tspan = [0 tfinal]; 
+options = odeset('RelTol', 1e-8, 'AbsTol',1e-8); % No event function needed cause were not deorbiting
+init = [SC.init.h; SC.init.ecc; SC.init.TA; SC.init.raan ;SC.init.inc ;SC.init.w]; 
+[time, state] = ode45(@vop_ODE, tspan, init, options,wEarth, re, mu, muSun, Cd, area, mass, SC.init.jd); 
 
 
 

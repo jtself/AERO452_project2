@@ -23,19 +23,19 @@ mu = 398600;               % km3/s2
 wEarth = [0;0;72.9211e-6]; % rad/s
 muSun = 132.712e9;         % km3/s2
 
-%% Section 1
+%% Section 1: HammerSat
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TLE Input (RANDOM TLE- GEO from other Proj)
-SC.init.UTC = "10/02/2023 12:00:00"; % UTC
-SC.init.ecc = 0.000001016; % actual ecc but we must change it to zero
-SC.init.inc = deg2rad(0.0009);               % rad
-SC.init.rp = 35782 + re;                 % km
-SC.init.ra = 35791 + re;                 % km
-SC.init.raan = deg2rad(246.2601);            % rad
-SC.init.w = deg2rad(273.8346);               % rad
-SC.init.revperday = 1.00269599;              % rev/day
-SC.init.Me = deg2rad(199.9092);              % rad
+% TLE Input (HammerSat)
+SC.init.UTC = "11/18/2023 06:41:13"; % UTC
+SC.init.ecc = 0.0001978; % actual ecc but we must change it to zero
+SC.init.inc = deg2rad(51.6407);               % rad
+SC.init.rp = 411 + re;                 % km
+SC.init.ra = 414 + re;                 % km
+SC.init.raan = deg2rad(285.1807);            % rad
+SC.init.w = deg2rad(121.7946);               % rad
+SC.init.revperday = 15.51474585;              % rev/day
+SC.init.Me = deg2rad(238.3237);              % rad
 
 % Calculate Additional COEs
 SC.init.a = 0.5*(SC.init.rp + SC.init.ra);             % km
@@ -60,28 +60,57 @@ diameter = 1;          % m
 mass = 100;            % kg
 area = (1/(1000^2))*pi*(diameter/2)^2; % km
 Cd = 2.2;
-tfinal = 120*24*60*60; % RANDOM 
+tfinal = 365*24*60*60; % RANDOM 
 
 tspan = [0 tfinal]; 
 tic 
-options = odeset('RelTol', 1e-13, 'AbsTol',1e-13); % No event function needed cause were not deorbiting
+options = odeset('RelTol', 1e-8, 'AbsTol',1e-8,'Events',@eventDeOrbit);
 init = [SC.init.h; SC.init.ecc; SC.init.TA; SC.init.raan ;SC.init.inc ;SC.init.w]; 
 [time, state] = ode45(@vop_ODE, tspan, init, options,wEarth, re, mu, muSun, Cd, area, mass, SC.init.jd); 
 tocTest1 = toc(tic);
 
 disp("Part 1 took: " + tocTest1 + " sec")
 
+
+time = time/(24*3600);
 % Find rVector
 r = zeros(length(state),3);
 for i = 1:length(state)
     [r_temp,~] = COES2RandV(state(i,1),state(i,2),state(i,5),state(i,4),state(i,6),state(i,3),mu);
     r(i,1:3) = r_temp;
+    posNorm(i) = norm(r_temp);
 end
+
+[~, apogeeIndex] = findpeaks(posNorm);
+[~,perigeeIndex] = findpeaks(-posNorm);
+%apogeeIndex = apogeeIndex(1:(length(perigeeIndex)));
+
+for i = 1:length(apogeeIndex)
+    apogee(i) = posNorm(apogeeIndex(i));
+    perigee(i) = posNorm(perigeeIndex(i));
+    timeA(i) = time(apogeeIndex(i));
+    timeP(i) = time(perigeeIndex(i));
+end
+
+apogee = apogee - re;
+perigee = perigee - re;
 
 figure
 h1 = gca;
 earth_sphere(h1)
 hold on
 plot3(r(:,1),r(:,2),r(:,3))
+
+
+figure
+plot(timeA,apogee,'LineWidth',2)
+hold on
+plot(timeP,perigee,'LineWidth',2)
+grid on
+legend("Apogee","Perigee",'Location','best')
+title("HammerSAT Orbital Path")
+ylabel("Altitude [km]")
+xlabel("Time [Days]")
+
 
 %% Section 2

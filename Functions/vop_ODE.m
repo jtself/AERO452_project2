@@ -91,6 +91,7 @@ aJ = aJ_J2 + aJ_J3 + aJ_J4 + aJ_J5 + aJ_J6;
 aK = aK_J2 + aK_J3 + aK_J4 + aK_J5 + aK_J6;
 
 acc_J2_6 = [aI; aJ; aK];
+acc_J2_6 = Qxr*acc_J2_6;
 
 %% Sum All Pertubations
 

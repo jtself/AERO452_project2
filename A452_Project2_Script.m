@@ -27,7 +27,7 @@ muSun = 132.712e9;         % km3/s2
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TLE Input (RANDOM TLE- GEO from other Proj)
-SC.init.UTC = "02/10/2023 05:38:01"; % UTC
+SC.init.UTC = "10/02/2023 12:00:00"; % UTC
 SC.init.ecc = 0.000001016; % actual ecc but we must change it to zero
 SC.init.inc = deg2rad(0.0009);               % rad
 SC.init.rp = 35782 + re;                 % km
@@ -60,7 +60,7 @@ diameter = 1;          % m
 mass = 100;            % kg
 area = (1/(1000^2))*pi*(diameter/2)^2; % km
 Cd = 2.2;
-tfinal = 365*24*60*60; % RANDOM 
+tfinal = 120*24*60*60; % RANDOM 
 
 tspan = [0 tfinal]; 
 tic 
@@ -78,6 +78,10 @@ for i = 1:length(state)
     r(i,1:3) = r_temp;
 end
 
+figure
+h1 = gca;
+earth_sphere(h1)
+hold on
 plot3(r(:,1),r(:,2),r(:,3))
 
 

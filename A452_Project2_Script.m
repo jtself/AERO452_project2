@@ -84,5 +84,4 @@ earth_sphere(h1)
 hold on
 plot3(r(:,1),r(:,2),r(:,3))
 
-
 %% Section 2

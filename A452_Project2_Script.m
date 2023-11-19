@@ -117,7 +117,7 @@ xlabel("Time [Days]")
 %% Adding Lamberts
 % This will run but is incorrect
 
-days = 5;
+days = 30;
 timeVector = linspace(0,days*24*60*60,days);
 tm = 1;
 mu = 398600;
@@ -141,16 +141,18 @@ tspan = [tspanValue*i - tspanValue; tspanValue*i]; % run for 1 day
 
 r1vec = r0vec;
 r2vec = state_coast(end,1:3)';
+v2vec_f = state_coast(end,4:6)';
 
-[v1vec, v2vec] = lambert(r1vec, r2vec, dt, tm, mu);
 
-deltaV = deltaV + norm(v0vec-v1vec);
+[v1vec, v2vec_i] = lambert(r1vec, r2vec, dt, tm, mu);
+
+deltaV = deltaV + norm(v0vec-v1vec) + norm(v2vec_f-v2vec_i);
 
 rinit = [state_coast(end,1);state_coast(end,2);state_coast(end,3)];
 vinit = [state_coast(end,4);state_coast(end,5);state_coast(end,6)];
 
 [h, inc, RAAN, ecc, w, theta, epsilon, a, T] = OrbitalElements(rinit,vinit,mu);
-init_vop = [h; ecc; theta; RAAN; inc; w];
+init_vop = [h; ecc; deg2rad(theta); deg2rad(RAAN); deg2rad(inc); deg2rad(w)];
 init_coast = [rinit;vinit];
 
 rStorage = [rStorage;state_vop];
@@ -167,7 +169,22 @@ end
 %%
 
 figure
-plot(tStorage,rStorage(:,5))
+plot(tStorage,rStorage(:,1)- SC.init.h)
+title("h")
+figure
+plot(tStorage,rStorage(:,2)-SC.init.ecc)
+title("ecc")
+figure
+plot(tStorage,rad2deg(rStorage(:,3)-SC.init.TA))
+title("theta")
+figure
+plot(tStorage,rad2deg(rStorage(:,4)-SC.init.raan))
+title("raan")
+figure
+plot(tStorage,deg2rad(rStorage(:,5)-SC.init.inc))
+title("inc")
+figure
+plot(tStorage,deg2rad(rStorage(:,6)-SC.init.w))
+title("w")
 
 
-%% Section 2

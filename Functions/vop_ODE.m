@@ -1,4 +1,4 @@
-function [dstate] = vop_ODE(time, state, wEarth, re, mu, muSun, Cd, area, mass, jd_epoch)
+function [dstate] = vop_ODE(time, state, wEarth, re, mu, muSun, Cd, area, mass, jd_epoch, Cr, Psr)
 
 %% Find COES
 h = state(1);
@@ -35,6 +35,11 @@ rVect = C_ECI_PERI' * rperifocal;
 vVect = C_ECI_PERI' * vperifocal;
 r = norm(rVect);
 
+%% Find Current JD and Solar Position
+
+jd = jd_epoch + time/(60*60*24);
+[~, ~, r_S] = solar_position(jd);
+
 %% Build Qxx Rotaion Matrix (ECI --> LVLH)
 R_hat = rVect/r;
 N_hat = cross(rVect,vVect)/norm(cross(rVect,vVect));
@@ -50,13 +55,27 @@ acc_drag = -0.5*Cd*area*(1/mass).*rho.*(norm(Vrel)).*(Vrel);
 acc_drag = Qxr*acc_drag;
 
 %% Find Solar Gravity Pertubation
-jd = jd_epoch + time/(60*60*24);
-[~, ~, r_S] = solar_position(jd);
 r_S_SC = r_S - rVect;
 q = dot(rVect,(2*r_S - rVect))/(norm(r_S)^2);
 F = q*(q^2 - 3*q + 3)/(1+ ((1-q)^(1.5)))';
 acc_SolarGravity = muSun*(F*r_S - rVect)/(norm(r_S_SC)^3);
 acc_SolarGravity = Qxr*acc_SolarGravity;
+
+%% Find SRP Pertubation
+
+thetaB = acos(re/r);
+thetaA = acos(re/r_S);
+theta = acos(dot(r_S,rVect)/(norm(r_S)*r));
+
+if (thetaA + thetaB) < theta
+    F = 0; % This only accounts for full shadow. Need to change to account for some shadow (F = 0.5)
+else
+    F = 1;
+end
+
+acc_SRP = -1000*Psr*Cr*area*(1/mass)*(rVect)*(1/r)*F;
+acc_SRP = Qxr*acc_SRP;
+
 
 %% Find J2-J6 Pertubation
 
@@ -95,7 +114,7 @@ acc_J2_6 = Qxr*acc_J2_6;
 
 %% Sum All Pertubations
 
-p = acc_drag + acc_SolarGravity + acc_J2_6; %  + acc_SRP 
+p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
 pr = p(1);
 ps = p(2);
 pw = p(3);

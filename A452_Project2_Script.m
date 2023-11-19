@@ -55,21 +55,21 @@ SC.init.h = findh(SC.init.a, mu, SC.init.ecc, SC.init.TA);
 
 % Need to model EXP Drag, J2-J6, Sun as extra Body, and SRP
 
+% For hammerSat d~0.5 and m~50 but that makes the pert lower 
 % RANDOM PARAMETERS
 diameter = 1;          % m
 mass = 100;            % kg
 area = (1/(1000^2))*pi*(diameter/2)^2; % km
 Cd = 2.2;
+Cr = 1.2;
+Psr = 4.57*10^-6;
+
 tfinal = 365*24*60*60; % RANDOM 
-
 tspan = [0 tfinal]; 
-tic 
-options = odeset('RelTol', 1e-8, 'AbsTol',1e-8,'Events',@eventDeOrbit);
+ticStart = tic;
+options = odeset('RelTol', 1e-9, 'AbsTol',1e-9,'Events',@eventDeOrbit);
 init = [SC.init.h; SC.init.ecc; SC.init.TA; SC.init.raan ;SC.init.inc ;SC.init.w]; 
-[time, state] = ode45(@vop_ODE, tspan, init, options,wEarth, re, mu, muSun, Cd, area, mass, SC.init.jd); 
-tocTest1 = toc(tic);
-
-disp("Part 1 took: " + tocTest1 + " sec")
+[time, state] = ode45(@vop_ODE, tspan, init, options,wEarth, re, mu, muSun, Cd, area, mass, SC.init.jd, Cr, Psr); 
 
 
 time = time/(24*3600);
@@ -95,12 +95,14 @@ end
 apogee = apogee - re;
 perigee = perigee - re;
 
+tocEnd = toc(ticStart);
+disp("HammerSat took: " + tocEnd + " sec to run")
+
 figure
 h1 = gca;
 earth_sphere(h1)
 hold on
 plot3(r(:,1),r(:,2),r(:,3))
-
 
 figure
 plot(timeA,apogee,'LineWidth',2)
@@ -111,6 +113,61 @@ legend("Apogee","Perigee",'Location','best')
 title("HammerSAT Orbital Path")
 ylabel("Altitude [km]")
 xlabel("Time [Days]")
+
+%% Adding Lamberts
+% This will run but is incorrect
+
+days = 5;
+timeVector = linspace(0,days*24*60*60,days);
+tm = 1;
+mu = 398600;
+dt = 3600; % 1 minute lambert
+tspanValue = 24*60*60;
+deltaV = 0;
+
+init_vop = [SC.init.h; SC.init.ecc; SC.init.TA; SC.init.raan ;SC.init.inc ;SC.init.w]; 
+init_coast =[SC.init.rVect;SC.init.vVect];
+options = odeset('RelTol', 1e-8, 'AbsTol',1e-8);
+
+rStorage = []; 
+tStorage = [];
+for i = 1:length(timeVector)
+
+tspan = [tspanValue*i - tspanValue; tspanValue*i]; % run for 1 day
+[time_vop, state_vop] = ode45(@vop_ODE, tspan, init_vop, options, wEarth, re, mu, muSun, Cd, area, mass, SC.init.jd, Cr, Psr); 
+[time_coast, state_coast] = ode45(@coast_ODE, tspan, init_coast, options, mu);
+
+[r0vec,v0vec] = COES2RandV(state_vop(end,1),state_vop(end,2),state_vop(end,5),state_vop(end,4),state_vop(end,6),state_vop(end,3),mu);
+
+r1vec = r0vec;
+r2vec = state_coast(end,1:3)';
+
+[v1vec, v2vec] = lambert(r1vec, r2vec, dt, tm, mu);
+
+deltaV = deltaV + norm(v0vec-v1vec);
+
+rinit = [state_coast(end,1);state_coast(end,2);state_coast(end,3)];
+vinit = [state_coast(end,4);state_coast(end,5);state_coast(end,6)];
+
+[h, inc, RAAN, ecc, w, theta, epsilon, a, T] = OrbitalElements(rinit,vinit,mu);
+init_vop = [h; ecc; theta; RAAN; inc; w];
+init_coast = [rinit;vinit];
+
+rStorage = [rStorage;state_vop];
+tStorage = [tStorage;time_vop];
+
+end
+%%
+for i = 1:length(rStorage)
+    [r_temp,~] = COES2RandV(rStorage(i,1),rStorage(i,2),rStorage(i,5),rStorage(i,4),rStorage(i,6),rStorage(i,3),mu);
+    r(i,1:3) = r_temp;
+    posNorm(i) = norm(r_temp);
+end
+
+%%
+
+figure
+plot(tStorage,rStorage(:,5))
 
 
 %% Section 2

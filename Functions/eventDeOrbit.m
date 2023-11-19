@@ -1,4 +1,4 @@
-function [value,isterminal,direction] = eventDeOrbit(time, state, wEarth, re, mu, muSun, Cd, area, mass, jd_epoch)
+function [value,isterminal,direction] = eventDeOrbit(time, state, wEarth, re, mu, muSun, Cd, area, mass, jd_epoch, Cr, Psr)
 
 % Find COES
 h = state(1);

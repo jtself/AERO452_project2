@@ -68,12 +68,12 @@ thetaA = acos(re/r_S);
 theta = acos(dot(r_S,rVect)/(norm(r_S)*r));
 
 if (thetaA + thetaB) < theta
-    F = 0; % This only accounts for full shadow. Need to change to account for some shadow (F = 0.5)
+    F = 0;
 else
     F = 1;
 end
 
-acc_SRP = -(1/1000)*Psr*Cr*area*(1/mass)*(rVect)*(1/r)*F;
+acc_SRP = -(1/1000)*Psr*Cr*area*(1/mass)*(r_S)*(1/norm(r_S))*F;
 acc_SRP = Qxr*acc_SRP;
 
 
@@ -93,9 +93,9 @@ aI_J3 = ((-5*J3*mu*(re^3)*rVect(1))/(2*(r^7)))*(3*rVect(3) - (7*(rVect(3)^3))/(r
 aJ_J3 = ((-5*J3*mu*(re^3)*rVect(2))/(2*(r^7)))*(3*rVect(3) - (7*(rVect(3)^3))/(r^2));
 aK_J3 = ((-5*J3*mu*(re^3))/(2*(r^7)))*(6*(rVect(3)^2) - (7*(rVect(3)^4))/(r^2) - (3/5)*r^2);
 
-aI_J4 = ((15*J4*mu*(re^4)*rVect(1))/(8*(r^7)))*(1- ((14*(rVect(3)^2))/(r^2)) + ((21*(rVect(3)^4))/(r^4)));
-aJ_J4 = ((15*J4*mu*(re^4)*rVect(2))/(8*(r^7)))*(1- ((14*(rVect(3)^2))/(r^2)) + ((21*(rVect(3)^4))/(r^4)));
-aK_J4 = ((15*J4*mu*(re^4)*rVect(3))/(8*(r^7)))*(5- ((70*(rVect(3)^2))/(3*(r^2))) + ((21*(rVect(3)^4))/(r^4)));
+aI_J4 = ((-15*J4*mu*(re^4)*rVect(1))/(8*(r^7)))*(1- ((14*(rVect(3)^2))/(r^2)) + ((21*(rVect(3)^4))/(r^4)));
+aJ_J4 = ((-15*J4*mu*(re^4)*rVect(2))/(8*(r^7)))*(1- ((14*(rVect(3)^2))/(r^2)) + ((21*(rVect(3)^4))/(r^4)));
+aK_J4 = ((-15*J4*mu*(re^4)*rVect(3))/(8*(r^7)))*(5- ((70*(rVect(3)^2))/(3*(r^2))) + ((21*(rVect(3)^4))/(r^4)));
 
 aI_J5 = ((3*J5*mu*(re^5)*rVect(1)*rVect(3))/(8*(r^9)))*(35- 210*((rVect(3)^2)/(r^2))+ 231*((rVect(3)^4)/(r^4)));
 aJ_J5 = ((3*J5*mu*(re^5)*rVect(2)*rVect(3))/(8*(r^9)))*(35- 210*((rVect(3)^2)/(r^2))+ 231*((rVect(3)^4)/(r^4)));
@@ -115,6 +115,7 @@ acc_J2_6 = Qxr*acc_J2_6;
 %% Sum All Pertubations
 
 p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
+
 pr = p(1);
 ps = p(2);
 pw = p(3);

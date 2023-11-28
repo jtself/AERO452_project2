@@ -64,7 +64,7 @@ Cd = 2.2;
 Cr = 1.2;
 Psr = 4.57*10^-6;
 
-tfinal = 200*24*60*60; % RANDOM 
+tfinal = 2*24*60*60; % RANDOM 
 tspan = [0 tfinal]; 
 ticStart = tic;
 options = odeset('RelTol', 1e-8, 'AbsTol',1e-8,'Events',@eventDeOrbit);
@@ -83,7 +83,6 @@ end
 
 [~, apogeeIndex] = findpeaks(posNorm);
 [~,perigeeIndex] = findpeaks(-posNorm);
-%apogeeIndex = apogeeIndex(1:(length(perigeeIndex)));
 
 for i = 1:length(apogeeIndex)
     apogee(i) = posNorm(apogeeIndex(i));
@@ -102,7 +101,7 @@ figure
 h1 = gca;
 earth_sphere(h1)
 hold on
-plot3(r(:,1),r(:,2),r(:,3))
+plot3(r(:,1),r(:,2),r(:,3),'.')
 
 figure
 plot(timeA,apogee,'LineWidth',2)
@@ -113,6 +112,25 @@ legend("Apogee","Perigee",'Location','best')
 title("HammerSAT Orbital Path")
 ylabel("Altitude [km]")
 xlabel("Time [Days]")
+
+figure
+plot(time,state(:,1)- SC.init.h)
+title("h")
+figure
+plot(time,state(:,2)-SC.init.ecc)
+title("ecc")
+figure
+plot(time,rad2deg(state(:,3)-SC.init.TA))
+title("theta")
+figure
+plot(time,rad2deg(state(:,4)-SC.init.raan))
+title("raan")
+figure
+plot(time,deg2rad(state(:,5)-SC.init.inc))
+title("inc")
+figure
+plot(time,deg2rad(state(:,6)-SC.init.w))
+title("w")
 
 %% Adding Lamberts
 % % This will run but is incorrect

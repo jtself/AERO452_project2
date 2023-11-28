@@ -73,7 +73,7 @@ else
     F = 1;
 end
 
-acc_SRP = -1000*Psr*Cr*area*(1/mass)*(rVect)*(1/r)*F;
+acc_SRP = -(1/1000)*Psr*Cr*area*(1/mass)*(rVect)*(1/r)*F;
 acc_SRP = Qxr*acc_SRP;
 
 

@@ -73,7 +73,7 @@ else
     F = 1;
 end
 
-acc_SRP = -(1/1000)*Psr*Cr*area*(1/mass)*(r_S)*(1/norm(r_S))*F;
+acc_SRP = -(1000)*Psr*Cr*area*(1/mass)*(r_S)*(1/norm(r_S))*F;
 acc_SRP = Qxr*acc_SRP;
 
 
@@ -114,8 +114,8 @@ acc_J2_6 = Qxr*acc_J2_6;
 
 %% Sum All Pertubations
 
-p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
-
+% p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
+p = acc_drag;
 pr = p(1);
 ps = p(2);
 pw = p(3);

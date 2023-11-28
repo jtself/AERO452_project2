@@ -57,17 +57,17 @@ SC.init.h = findh(SC.init.a, mu, SC.init.ecc, SC.init.TA);
 
 % For hammerSat d~0.5 and m~50 but that makes the pert lower 
 % RANDOM PARAMETERS
-diameter = 1;          % m
+diameter = 10;          % m
 mass = 100;            % kg
 area = (1/(1000^2))*pi*(diameter/2)^2; % km
 Cd = 2.2;
 Cr = 1.2;
 Psr = 4.57*10^-6;
 
-tfinal = 2*24*60*60; % RANDOM 
+tfinal = 20*24*60*60; % RANDOM 
 tspan = [0 tfinal]; 
 ticStart = tic;
-options = odeset('RelTol', 1e-8, 'AbsTol',1e-8,'Events',@eventDeOrbit);
+options = odeset('RelTol', 1e-12, 'AbsTol',1e-12,'Events',@eventDeOrbit);
 init = [SC.init.h; SC.init.ecc; SC.init.TA; SC.init.raan ;SC.init.inc ;SC.init.w]; 
 [time, state] = ode45(@vop_ODE, tspan, init, options,wEarth, re, mu, muSun, Cd, area, mass, SC.init.jd, Cr, Psr); 
 

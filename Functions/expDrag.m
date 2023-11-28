@@ -2,7 +2,7 @@ function [density] = expDrag(z)
 
 % Exponential Model for Drag From Curtis
 % Input:  z --> altitude [km]
-% Output: density  [km/m3]
+% Output: density  [kg/m3]
 
 %...Geometric altitudes (km):
 h = ...

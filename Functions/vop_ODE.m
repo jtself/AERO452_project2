@@ -114,8 +114,8 @@ acc_J2_6 = Qxr*acc_J2_6;
 
 %% Sum All Pertubations
 
-% p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
-p = acc_drag;
+p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
+%p = acc_drag;
 pr = p(1);
 ps = p(2);
 pw = p(3);

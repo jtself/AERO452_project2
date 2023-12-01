@@ -29,14 +29,14 @@ end
 A = ((sqrt(r1*r2))*sin(delta_theta))/(sqrt(1-cos(delta_theta)));
 
 % y(z)
-y = @(z) r1 + r2 + A*( (z*S(z)-1) / (sqrt(C(z)) ) );
+y = @(z) r1 + r2 + A*( (z*S_lambert(z)-1) / (sqrt(C_lambert(z)) ) );
 
 % Chi X
-X = @(z) sqrt( y(z)/C(z) );
+X = @(z) sqrt( y(z)/C_lambert(z) );
 
 % dtloop
 
-dtloop = @(z) (((X(z)^3)*S(z))/sqrt(mu)) + (A*sqrt(y(z))/sqrt(mu));
+dtloop = @(z) (((X(z)^3)*S_lambert(z))/sqrt(mu)) + (A*sqrt(y(z))/sqrt(mu));
 
 % z
 z = 0;
@@ -60,7 +60,7 @@ f = @(z) 1 - (y(z)/r1);
 
 g = @(z) A*sqrt(y(z)/mu);
 
-fdot = @(z) (sqrt(mu)/(r1*r2)) * sqrt( (y(z))/(C(z)) ) * (z*S(z)-1);
+fdot = @(z) (sqrt(mu)/(r1*r2)) * sqrt( (y(z))/(C_lambert(z)) ) * (z*S_lambert(z)-1);
 
 gdot = @(z) 1 - (y(z)/r2);
 
@@ -69,7 +69,7 @@ v2vec = (1/g(z))*(gdot(z)*r2vec-r1vec);
 
 % nested functions
     % stumpff
-    function S = S(z)
+    function S = S_lambert(z)
     % for S
         if z > 0
             S = (sqrt(z) - sin(sqrt(z))) / ((sqrt(z))^3);
@@ -80,7 +80,7 @@ v2vec = (1/g(z))*(gdot(z)*r2vec-r1vec);
         end
     end
     
-    function C = C(z)
+    function C = C_lambert(z)
            % for C
         if z > 0
             C = (1-cos(sqrt(z)))/z;

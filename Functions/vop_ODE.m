@@ -89,9 +89,13 @@ aI_J2 = ((-3*J2*mu*(re^2)*rVect(1))/(2*(r^5)))*(1 - (5*(rVect(3)^2))/(r^2));
 aJ_J2 = ((-3*J2*mu*(re^2)*rVect(2))/(2*(r^5)))*(1 - (5*(rVect(3)^2))/(r^2));
 aK_J2 = ((-3*J2*mu*(re^2)*rVect(3))/(2*(r^5)))*(3 - (5*(rVect(3)^2))/(r^2));
 
-aI_J3 = ((-5*J3*mu*(re^3)*rVect(1))/(2*(r^7)))*(3*rVect(3) - (7*(rVect(3)^3))/(r^2));
-aJ_J3 = ((-5*J3*mu*(re^3)*rVect(2))/(2*(r^7)))*(3*rVect(3) - (7*(rVect(3)^3))/(r^2));
-aK_J3 = ((-5*J3*mu*(re^3))/(2*(r^7)))*(6*(rVect(3)^2) - (7*(rVect(3)^4))/(r^2) - (3/5)*r^2);
+
+rx = rVect(1);
+ry = rVect(2);
+rz = rVect(3);
+aI_J3 = ( (-5*J3*mu*re^3*rx) / (2*r^7) ) * (3*rz - (7*rz^3)/(r^2) );
+aJ_J3= ( (-5*J3*mu*re^3*ry) / (2*r^7) ) * (3*rz - (7*rz^3)/(r^2) );
+aK_J3 = ( (-5*J3*mu*re^3) / (2*r^7) ) * (6*rz^2 - (7*rz^4)/(r^2) - (3/5)*r^2 );
 
 aI_J4 = ((-15*J4*mu*(re^4)*rVect(1))/(8*(r^7)))*(1- ((14*(rVect(3)^2))/(r^2)) + ((21*(rVect(3)^4))/(r^4)));
 aJ_J4 = ((-15*J4*mu*(re^4)*rVect(2))/(8*(r^7)))*(1- ((14*(rVect(3)^2))/(r^2)) + ((21*(rVect(3)^4))/(r^4)));
@@ -105,17 +109,28 @@ aI_J6 = ((-J6*mu*(re^6)*rVect(1))/(16*(r^9)))*(35 - 945*((rVect(3)^2)/(r^2)) + 3
 aJ_J6 = ((-J6*mu*(re^6)*rVect(2))/(16*(r^9)))*(35 - 945*((rVect(3)^2)/(r^2)) + 3465*((rVect(3)^4)/(r^4)) -3003*((rVect(3)^6)/(r^6)));
 aK_J6 = ((-J6*mu*(re^6)*rVect(3))/(16*(r^9)))*(245 - 2205*((rVect(3)^2)/(r^2)) + 4851*((rVect(3)^4)/(r^4)) -3003*((rVect(3)^6)/(r^6)));
 
-aI = aI_J2 + aI_J3 + aI_J4 + aI_J5 + aI_J6;
-aJ = aJ_J2 + aJ_J3 + aJ_J4 + aJ_J5 + aJ_J6;
-aK = aK_J2 + aK_J3 + aK_J4 + aK_J5 + aK_J6;
 
-acc_J2_6 = [aI; aJ; aK];
-acc_J2_6 = Qxr*acc_J2_6;
+aJ2 = [aI_J2;aJ_J2;aK_J2];
+aJ2 = Qxr*aJ2;
+
+aJ3 = [aI_J3;aJ_J3;aK_J3];
+aJ3 = Qxr*aJ3;
+
+aJ4 = [aI_J4;aJ_J4;aK_J4];
+aJ4 = Qxr*aJ4;
+
+aJ5 = [aI_J5;aJ_J5;aK_J5];
+aJ5 = Qxr*aJ5;
+
+aJ6 = [aI_J6;aJ_J6;aK_J6];
+aJ6 = Qxr*aJ6;
+
+acc_J2_6 = aJ2 + aJ3;% + aJ4 + aJ5 + aJ6;
 
 %% Sum All Pertubations
 
 p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
-%p = acc_drag;
+p = acc_J2_6;
 pr = p(1);
 ps = p(2);
 pw = p(3);
@@ -126,7 +141,6 @@ dh = r*ps;
 
 decc = (h/mu)*s_theta*pr + (1/(mu*h))*((h^2 + mu*r)*c_theta + mu*ecc*r)*ps;
 
-% theta
 twobodymotion= h/r^2;
 dtheta_pert = (1/(ecc*h))*((h^2/mu)*c_theta*pr - (r + (h^2/mu))*s_theta*ps);
 dtheta =  twobodymotion + dtheta_pert;

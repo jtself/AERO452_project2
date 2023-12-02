@@ -65,10 +65,11 @@ SC.init.h = findh(SC.init.a, mu, SC.init.ecc);
 
 % Need to model EXP Drag, J2-J6, Sun as extra Body, and SRP
 
-% For hammerSat d~0.5 and m~50 but that makes the pert lower 
-% RANDOM PARAMETERS
-diameter = 1;          % m
-mass = 100;            % kg
+% This is a 1U Cubesat
+% 10x10x10 cm cube
+% mass = 2 kg
+diameter = sqrt(0.1^2 + 0.1^2);        % m
+mass = 2;            % kg
 area = (1/(1000^2))*pi*(diameter/2)^2; % km2
 Cd = 2.2;
 Cr = 1.2;
@@ -99,14 +100,13 @@ h1 = gca;
 earth_sphere(h1)
 hold on
 plot3(r(:,1),r(:,2),r(:,3),'.')
-plot3(r(1,1),r(1,2),r(1,3),'*','LineWidth',3)
-plot3(r(end,1),r(end,2),r(end,3),'*','LineWidth',3)
-legend("Earth","Orbital Path","Start Position","End Position")
+plot3(r(1,1),r(1,2),r(1,3),'*','LineWidth',5)
+plot3(r(end,1),r(end,2),r(end,3),'*','LineWidth',5)
+lgd = legend("Earth","Orbital Path","Start Position","End Position",'Location','southoutside');
+lgd.NumColumns = 2;
 xlabel("X [Km]")
 ylabel("Y [Km]")
 zlabel("Z [Km]")
-
-
 
 figure
 plot(time,ra-re,'LineWidth',2)
@@ -114,31 +114,39 @@ hold on
 plot(time,rp-re,'LineWidth',2)
 grid on
 legend("Apogee","Perigee",'Location','best')
-title("HammerSAT Orbital Path")
 ylabel("Altitude [km]")
 xlabel("Time [Days]")
 
 figure
 plot(time,state(:,1)- SC.init.h)
-title("h")
+ylabel("h-h0 [km2/s]")
 xlabel("Time [days]")
-ylabel("")
+grid on
 figure
 plot(time,state(:,2)-SC.init.ecc)
-title("ecc")
+ylabel("ecc-ecc0")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,rad2deg(state(:,3)-SC.init.TA))
-title("theta")
+ylabel("theta-theta0 [degs]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,rad2deg(state(:,4)-SC.init.raan))
-title("raan")
+ylabel("raan-raan0 [degs]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,deg2rad(state(:,5)-SC.init.inc))
-title("inc")
+ylabel("inc-inc0 [degs]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,deg2rad(state(:,6)-SC.init.w))
-title("w")
-
+ylabel("w-w0 [degs]")
+xlabel("Time [days]")
+grid on
 
 %% Section 1: Outfit1 Lamberts
 
@@ -157,7 +165,7 @@ for i = 1:length(state_coast)
     rf = [state_coast(i,1);state_coast(i,2);state_coast(i,3)];
     [v1vec, v2vec] = lambert(r1vec, rf, dt, tm, mu);
     vf = [state_coast(i,4);state_coast(i,5);state_coast(i,6)];
-    deltaV(i) = norm(v1vec - vend) + norm(v2vec - vf);%%%%%%%%%%%%%%%%%%%%%%%%%%% NEED TO CHECK %%%%%%%%%%%%%%%%%%%
+    deltaV(i) = norm(v1vec - vend) + norm(v2vec - vf);
 end
 
 [value,index] = min(deltaV);
@@ -173,14 +181,15 @@ close all
 %
 figure
 h1 = gca;
-%earth_sphere(h1)
-%hold on
-plot3(r(16000:end,1),r(16000:end,2),r(16000:end,3),'LineWidth',1)
+earth_sphere(h1)
 hold on
-plot3(state_lambert(:,1),state_lambert(:,2),state_lambert(:,3))
+plot3(r(:,1),r(:,2),r(:,3),'LineWidth',1)
 plot3(state_coast(:,1),state_coast(:,2),state_coast(:,3),'LineWidth',1)
-plot3(state_lambert(end,1),state_lambert(end,2),state_lambert(end,3),'*','LineWidth',2)
-plot3(state_lambert(1,1),state_lambert(1,2),state_lambert(1,3),'*','LineWidth',2)
+plot3(state_lambert(:,1),state_lambert(:,2),state_lambert(:,3),'LineWidth',4)
+plot3(state_lambert(1,1),state_lambert(1,2),state_lambert(1,3),'*','LineWidth',5)
+plot3(state_lambert(end,1),state_lambert(end,2),state_lambert(end,3),'*','LineWidth',5)
+lgd = legend("Earth","Perturbed Orbit","Osculating Orbit","Lambert Trajectory","Initial Position","Final Position",'Location','southoutside');
+lgd.NumColumns = 2;
 
 %% Section 1: Falcon 9 R/B Calculations
 
@@ -226,9 +235,10 @@ RB.init.h = findh(RB.init.a, mu, RB.init.ecc);
 % Height	13.8 m / 45.3 ft
 % Diameter	3.7 m / 12.1 ft
 % Empty Mass	3,900 kg / 8,598 lb
-diameter = 13.8;        % m
+diameter = 3.7;      % m
+height = 13.8; % m
 mass = 3900;            % kg
-area = (1/(1000^2))*pi*(diameter/2)^2; % km2
+area = (1/(1000^2))*(diameter*height); % km2
 Cd = 2.2;
 Cr = 1.2;
 Psr = 4.57*10^-6;
@@ -263,7 +273,13 @@ h1 = gca;
 earth_sphere(h1)
 hold on
 plot3(r(:,1),r(:,2),r(:,3),'.')
+plot3(r(1,1),r(1,2),r(1,3),'*','LineWidth',5)
 plot3(r(end,1),r(end,2),r(end,3),'*','LineWidth',5)
+lgd = legend("Earth","Orbital Path","Start Position","End Position",'Location','southoutside');
+lgd.NumColumns = 2;
+xlabel("X [Km]")
+ylabel("Y [Km]")
+zlabel("Z [Km]")
 
 figure
 plot(time,ra-re,'LineWidth',2)
@@ -271,31 +287,41 @@ hold on
 plot(time,rp-re,'LineWidth',2)
 grid on
 legend("Apogee","Perigee",'Location','best')
-title("HammerSAT Orbital Path")
 ylabel("Altitude [km]")
 xlabel("Time [Days]")
 
 figure
 plot(time,state(:,1)- RB.init.h)
-title("h")
+ylabel("h-h0 [km2/s]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,state(:,2)-RB.init.ecc)
-title("ecc")
+ylabel("ecc-ecc0")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,rad2deg(state(:,3)-RB.init.TA))
-title("theta")
+ylabel("theta-theta0 [degs]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,rad2deg(state(:,4)-RB.init.raan))
-title("raan")
+ylabel("raan-raan0 [degs]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,deg2rad(state(:,5)-RB.init.inc))
-title("inc")
+ylabel("inc-inc0 [degs]")
+xlabel("Time [days]")
+grid on
 figure
 plot(time,deg2rad(state(:,6)-RB.init.w))
-title("w")
+ylabel("w-w0 [degs]")
+xlabel("Time [days]")
+grid on
 
-
-%% Section 1: Outfit1 Lamberts
+%% Section 1: Falcon 9 R/B Lamberts
 clc
 
 r1vec = [r(end,1);r(end,2);r(end,3)];
@@ -315,7 +341,7 @@ deltaV = zeros(1,length(state_coast));
     rf = [state_coast(i,1);state_coast(i,2);state_coast(i,3)];
     [v1vec, v2vec] = lambert(r1vec, rf, dt, tm, mu);
     vf = [state_coast(i,4);state_coast(i,5);state_coast(i,6)];
-    deltaV(i) = norm(v1vec - vend) + norm(v2vec - vf);%%%%%%%%%%%%%%%%%%%%%%%%%%% NEED TO CHECK %%%%%%%%%%%%%%%%%%%
+    deltaV(i) = norm(v1vec - vend) + norm(v2vec - vf);
 %end
 
 disp(nonzeros(deltaV))
@@ -333,11 +359,12 @@ close all
 %
 figure
 h1 = gca;
-%earth_sphere(h1)
-%hold on
-plot3(r(16000:end,1),r(16000:end,2),r(16000:end,3),'LineWidth',1)
+earth_sphere(h1)
 hold on
-plot3(state_lambert(:,1),state_lambert(:,2),state_lambert(:,3))
+plot3(r(:,1),r(:,2),r(:,3),'LineWidth',1)
 plot3(state_coast(:,1),state_coast(:,2),state_coast(:,3),'LineWidth',1)
-plot3(state_lambert(end,1),state_lambert(end,2),state_lambert(end,3),'*','LineWidth',2)
-plot3(state_lambert(1,1),state_lambert(1,2),state_lambert(1,3),'*','LineWidth',2)
+plot3(state_lambert(:,1),state_lambert(:,2),state_lambert(:,3),'LineWidth',4)
+plot3(state_lambert(1,1),state_lambert(1,2),state_lambert(1,3),'*','LineWidth',5)
+plot3(state_lambert(end,1),state_lambert(end,2),state_lambert(end,3),'*','LineWidth',5)
+lgd = legend("Earth","Perturbed Orbit","Osculating Orbit","Lambert Trajectory","Initial Position","Final Position",'Location','southoutside');
+lgd.NumColumns = 2;

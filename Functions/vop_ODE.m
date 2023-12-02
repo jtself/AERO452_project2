@@ -125,12 +125,11 @@ aJ5 = Qxr*aJ5;
 aJ6 = [aI_J6;aJ_J6;aK_J6];
 aJ6 = Qxr*aJ6;
 
-acc_J2_6 = aJ2 + aJ3;% + aJ4 + aJ5 + aJ6;
+acc_J2_6 = aJ2 + aJ3 + aJ4 + aJ5 + aJ6;
 
 %% Sum All Pertubations
 
 p = acc_drag + acc_SolarGravity + acc_J2_6 + acc_SRP;
-p = acc_J2_6;
 pr = p(1);
 ps = p(2);
 pw = p(3);

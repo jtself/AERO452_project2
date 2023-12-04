@@ -89,7 +89,6 @@ aI_J2 = ((-3*J2*mu*(re^2)*rVect(1))/(2*(r^5)))*(1 - (5*(rVect(3)^2))/(r^2));
 aJ_J2 = ((-3*J2*mu*(re^2)*rVect(2))/(2*(r^5)))*(1 - (5*(rVect(3)^2))/(r^2));
 aK_J2 = ((-3*J2*mu*(re^2)*rVect(3))/(2*(r^5)))*(3 - (5*(rVect(3)^2))/(r^2));
 
-
 rx = rVect(1);
 ry = rVect(2);
 rz = rVect(3);

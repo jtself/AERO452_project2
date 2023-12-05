@@ -23,22 +23,24 @@ mu = 42828;                        % km3/s2
 wMars = [0;0;0.0000708907088544];   % rad/s
 muSun = 132.712e9;                 % km3/s2
 
-
-UTC = "2/04/2024 00:00:00"; % UTC
+% Date was arbitrarily chosen to reflect sun position/eclipse that was easy
+% to see.
+UTC = "2/04/2024 00:00:00"; % UTC 
 jd_epoch = juliandate(datetime(UTC,"Format","MM/dd/uuuu HH:mm:ss"));
 
+% MAVEN spacecraft characteristics
 mass = 1031;                  % kg
 area = (1/(1000^2))*11.4*2.3; % km2
 Cd = 2.2;
 Cr = 1.2;
-Psr = 586.2/(2.998e8);
+Psr = 586.2/(2.998e8); % Pa; Solar irradiance/speed of light at mars distance (average)
 
-tfinal = 50*24*3600; % RANDOM 
+tfinal = 50*24*3600; % Enough to show eclipse 
 tspan = [0 tfinal]; 
 
-h0 = 1.4892e4;
-ecc0 = 0.4604;
-inc0 = deg2rad(75);
+h0 = 1.4892e4; % calculated
+ecc0 = 0.4604; % calculated
+inc0 = deg2rad(75); % maven
 TA0 = 0;
 raan0 = 0;
 w0 =  0;
@@ -134,38 +136,99 @@ figure
 plot(time,ra-rm,'LineWidth',2)
 hold on
 plot(time,rp-rm,'LineWidth',2)
-grid on
-legend("Apogee","Perigee",'Location','best')
-ylabel("Altitude [km]")
-xlabel("Time [Days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [Days]','Interpreter','latex'); 
+yLab = ylabel('Altitude [km]','Interpreter','latex'); 
+plotTitle = title('Apogee and Perigee','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
+grid on 
+legend('Apogee','Perigee', 'interpreter','latex','Location', 'best')
 
 figure
 plot(time,state(:,1)- h0)
-ylabel("h-h0 [km2/s]")
-xlabel("Time [days]")
-grid on
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('h-h0 [km2/s]','Interpreter','latex'); 
+plotTitle = title('Changes in h','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
+grid on 
+
 figure
 plot(time,state(:,2)-ecc0)
-ylabel("ecc-ecc0")
-xlabel("Time [days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$ecc - ecc_0$','Interpreter','latex'); 
+plotTitle = title('Change in eccentricity','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
 grid on
+
 figure
 plot(time,rad2deg(state(:,3)-TA0))
-ylabel("theta-theta0 [degs]")
-xlabel("Time [days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\theta-\theta_0$ [degs]','Interpreter','latex'); 
+plotTitle = title('Changes in $\theta$','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
 grid on
+
 figure
 plot(time,rad2deg(state(:,4)-raan0))
-ylabel("raan-raan0 [degs]")
-xlabel("Time [days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\Omega-\Omega_0$ [degs]','Interpreter','latex'); 
+plotTitle = title('Changes in $\Omega$','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
 grid on
+
 figure
 plot(time,state(:,5)-inc0)
-ylabel("inc-inc0 [degs]")
-xlabel("Time [days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$inc-inc_0$ [degs]','Interpreter','latex'); 
+plotTitle = title('Changes in inclination','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
 grid on
+
 figure
 plot(time,rad2deg(state(:,6)-w0))
-ylabel("w-w0 [degs]")
-xlabel("Time [days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\omega - \omega_0$ [degs]','Interpreter','latex'); 
+plotTitle = title('Changes in argument of perigee','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
 grid on

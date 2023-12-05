@@ -113,10 +113,19 @@ figure
 plot(time,ra-re,'LineWidth',2)
 hold on
 plot(time,rp-re,'LineWidth',2)
-grid on
-legend("Apogee","Perigee",'Location','best')
-ylabel("Altitude [km]")
-xlabel("Time [Days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('Altitude [km]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 9) 
+grid on 
+legend('Apogee','Perigee', 'interpreter','latex','Location', 'best')
 
 
 figure()
@@ -337,10 +346,21 @@ figure
 plot(time,ra-re,'LineWidth',2)
 hold on
 plot(time,rp-re,'LineWidth',2)
-grid on
-legend("Apogee","Perigee",'Location','best')
-ylabel("Altitude [km]")
-xlabel("Time [Days]")
+
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('Altitude [km]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 9) 
+grid on 
+legend('Apogee','Perigee', 'interpreter','latex','Location', 'best')
+
 
 
 % Plot COEs
@@ -706,11 +726,19 @@ figure
 plot(overallTime,ra-re,'LineWidth',2)
 hold on
 plot(overallTime,rp-re,'LineWidth',2)
-grid on
-legend("Apogee","Perigee",'Location','best')
-ylabel("Altitude [km]")
-xlabel("Time [Days]")
-
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('Altitude [km]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 9) 
+grid on 
+legend('Apogee','Perigee', 'interpreter','latex','Location', 'best')
 %% Section 3: Special Orbit
 
 
@@ -784,13 +812,23 @@ ylabel("Y [Km]")
 zlabel("Z [Km]")
 
 figure
+% something is busted on the line below:
 plot(time,ra-re,'LineWidth',2)
 hold on
 plot(time,rp-re,'LineWidth',2)
-grid on
-legend("Apogee","Perigee",'Location','best')
-ylabel("Altitude [km]")
-xlabel("Time [Days]")
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('Altitude [km]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 9) 
+grid on 
+legend('Apogee','Perigee', 'interpreter','latex','Location', 'best')
 
 figure
 plot(time,state(:,1)- SC.init.h)

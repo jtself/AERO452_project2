@@ -30,7 +30,7 @@ r = norm(rVect);
 
 ALT = r - rm;
 
-value = ALT - 125;
+value = ALT - 80;
 isterminal = 1;
 direction = -1;
 

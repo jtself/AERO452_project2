@@ -118,36 +118,87 @@ legend("Apogee","Perigee",'Location','best')
 ylabel("Altitude [km]")
 xlabel("Time [Days]")
 
-figure
+
+figure()
+tiledlayout("vertical")
+nexttile
 plot(time,state(:,1)- SC.init.h)
-ylabel("h-h0 [km2/s]")
-xlabel("Time [days]")
-grid on
-figure
+% Graph pretty 
+ylim padded 
+xlim tight  
+yLab = ylabel('$h - h_0$','Interpreter','latex');  
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
 plot(time,state(:,2)-SC.init.ecc)
-ylabel("ecc-ecc0")
-xlabel("Time [days]")
-grid on
-figure
-plot(time,rad2deg(state(:,3)-SC.init.TA))
-ylabel("theta-theta0 [degs]")
-xlabel("Time [days]")
-grid on
-figure
+% Graph pretty 
+ylim padded 
+xlim tight  
+yLab = ylabel('$e - e_0$','Interpreter','latex');  
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+
+%nexttile DONT PLOT THETA
+%plot(time,rad2deg(state(:,3)-SC.init.TA))
+% Graph pretty 
+%ylim padded 
+%xlim tight 
+%xLab = xlabel('Time [days]','Interpreter','latex'); 
+%yLab = ylabel('$\theta - \omega_0$ [degs]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+%set(gca,'FontName','Palatino Linotype') 
+%set([xLab, yLab],'FontName','Palatino Linotype') 
+%set(gca,'FontSize', 9) 
+%set([xLab, yLab],'FontSize', 14) 
+%grid on 
+
+
+
+nexttile
 plot(time,rad2deg(state(:,4)-SC.init.raan))
-ylabel("raan-raan0 [degs]")
-xlabel("Time [days]")
-grid on
-figure
+% Graph pretty 
+ylim padded 
+xlim tight 
+yLab = ylabel('$\Omega - \Omega_0$','Interpreter','latex'); 
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
 plot(time,state(:,5)-SC.init.inc)
-ylabel("inc-inc0 [degs]")
-xlabel("Time [days]")
-grid on
-figure
+% Graph pretty 
+ylim padded 
+xlim tight 
+yLab = ylabel('$inc - inc_0$','Interpreter','latex');  
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
 plot(time,rad2deg(state(:,6)-SC.init.w))
-ylabel("w-w0 [degs]")
-xlabel("Time [days]")
-grid on
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\omega - \omega_0$','Interpreter','latex'); 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 9) 
+grid on 
 
 %% Section 1: Outfit1 Lamberts
 
@@ -291,36 +342,70 @@ legend("Apogee","Perigee",'Location','best')
 ylabel("Altitude [km]")
 xlabel("Time [Days]")
 
-figure
+
+% Plot COEs
+figure()
+tiledlayout("vertical")
+nexttile
 plot(time,state(:,1)- RB.init.h)
-ylabel("h-h0 [km2/s]")
-xlabel("Time [days]")
-grid on
-figure
+% Graph pretty 
+ylim padded 
+xlim tight  
+yLab = ylabel('$h - h_0$','Interpreter','latex');  
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
 plot(time,state(:,2)-RB.init.ecc)
-ylabel("ecc-ecc0")
-xlabel("Time [days]")
-grid on
-figure
-plot(time,rad2deg(state(:,3)-RB.init.TA))
-ylabel("theta-theta0 [degs]")
-xlabel("Time [days]")
-grid on
-figure
+% Graph pretty 
+ylim padded 
+xlim tight  
+yLab = ylabel('$e - e_0$','Interpreter','latex');  
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
 plot(time,rad2deg(state(:,4)-RB.init.raan))
-ylabel("raan-raan0 [degs]")
-xlabel("Time [days]")
-grid on
-figure
-plot(time,deg2rad(state(:,5)-RB.init.inc))
-ylabel("inc-inc0 [degs]")
-xlabel("Time [days]")
-grid on
-figure
-plot(time,deg2rad(state(:,6)-RB.init.w))
-ylabel("w-w0 [degs]")
-xlabel("Time [days]")
-grid on
+% Graph pretty 
+ylim padded 
+xlim tight 
+yLab = ylabel('$\Omega - \Omega_0$','Interpreter','latex'); 
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
+plot(time,state(:,5)-RB.init.inc)
+% Graph pretty 
+ylim padded 
+xlim tight 
+yLab = ylabel('$inc - inc_0$','Interpreter','latex');  
+set(gca,'FontName','Palatino Linotype') 
+set(yLab,'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set(yLab,'FontSize', 9) 
+grid on 
+
+nexttile
+plot(time,rad2deg(state(:,6)-RB.init.w))
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\omega - \omega_0$','Interpreter','latex'); 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 9) 
+grid on 
 
 %% Section 1: Falcon 9 R/B Lamberts
 clc
@@ -497,17 +582,28 @@ end
 overallTime = overallTime/24/3600;
 initialTime = initialTime/24/3600;
 finalTime= finalTime/24/3600;   
-
+%%% PRETTY PLOTS
 figure
 plot(overallTime,overallState(:,1)- SC.init.h)
 hold on
 plot(overallTime,overallState(:,7)- SC.init.h,'LineWidth',2)
 plot(initialTime,initalPoints(:,1)-SC.init.h,'*','LineWidth',3)
 plot(finalTime,finalPoints(:,1)-SC.init.h,'*','LineWidth',3)
-ylabel("h-h0 [km2/s]")
-xlabel("Time [days]")
-grid on
-legend("Perturbed Orbit","Osculating Orbit","Initial change in h","Final change in h",'Location','best')
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$h - h_0$ [km2/s]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 10) 
+grid on 
+legend("Perturbed Orbit","Osculating Orbit","Initial change in $h$","Final change in $h$", 'interpreter','latex','Location', 'best')
+
+
 
 figure
 plot(overallTime,overallState(:,2)-SC.init.ecc)
@@ -515,10 +611,19 @@ hold on
 plot(overallTime,overallState(:,8)-SC.init.ecc,'LineWidth',2)
 plot(initialTime,initalPoints(:,2)-SC.init.ecc,'*','LineWidth',3)
 plot(finalTime,finalPoints(:,2)-SC.init.ecc,'*','LineWidth',3)
-ylabel("ecc-ecc0")
-xlabel("Time [days]")
-grid on
-legend("Perturbed Orbit","Osculating Orbit","Initial change in ecc","Final change in ecc",'Location','best')
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$ecc-ecc_0$','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 10) 
+grid on 
+legend("Perturbed Orbit","Osculating Orbit","Initial change in $ecc$","Final change in $ecc$", 'interpreter','latex','Location', 'best')
 
 figure
 plot(overallTime,rad2deg(overallState(:,4)-SC.init.raan))
@@ -526,10 +631,20 @@ hold on
 plot(overallTime,rad2deg(overallState(:,10)-SC.init.raan),'LineWidth',2)
 plot(initialTime,rad2deg(initalPoints(:,4)-SC.init.raan),'*','LineWidth',3)
 plot(finalTime,rad2deg(finalPoints(:,4)-SC.init.raan),'*','LineWidth',3)
-ylabel("raan-raan0 [degs]")
-xlabel("Time [days]")
-grid on
-legend("Perturbed Orbit","Osculating Orbit","Initial change in raan","Final change in raan",'Location','best')
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\Omega - \Omega_0$ [deg]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 10) 
+grid on 
+legend("Perturbed Orbit","Osculating Orbit","Initial change in $\Omega$","Final change in $\Omega$", 'interpreter','latex','Location', 'best')
+
 
 figure
 plot(overallTime,rad2deg(overallState(:,5)-SC.init.inc))
@@ -537,10 +652,19 @@ hold on
 plot(overallTime,overallState(:,11)-SC.init.inc,'LineWidth',2)
 plot(initialTime,rad2deg(initalPoints(:,5)-SC.init.inc),'*','LineWidth',3)
 plot(finalTime,rad2deg(finalPoints(:,5)-SC.init.inc),'*','LineWidth',3)
-ylabel("inc-inc0 [degs]")
-xlabel("Time [days]")
-grid on
-legend("Perturbed Orbit","Osculating Orbit","Initial change in inc","Final change in inc",'Location','best')
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$inc - inc_0$ [deg]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 10) 
+grid on 
+legend("Perturbed Orbit","Osculating Orbit","Initial change in $inc$","Final change in $inc$", 'interpreter','latex','Location', 'best')
 
 figure
 plot(overallTime,rad2deg(overallState(:,6)-SC.init.w))
@@ -548,12 +672,24 @@ hold on
 plot(overallTime,rad2deg(overallState(:,12)-SC.init.w),'LineWidth',2)
 plot(initialTime,rad2deg(initalPoints(:,6)-SC.init.w),'*','LineWidth',3)
 plot(finalTime,rad2deg(finalPoints(:,6)-SC.init.w),'*','LineWidth',3)
-ylabel("w-w0 [degs]")
-xlabel("Time [days]")
-grid on
-legend("Perturbed Orbit","Osculating Orbit","Initial change in w","Final change in w",'Location','best')
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Time [days]','Interpreter','latex'); 
+yLab = ylabel('$\omega - \omega_0$ [deg]','Interpreter','latex'); 
+%plotTitle = title('title $x$','interpreter','latex'); 
+%set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set(gca,'FontSize', 9) 
+set([xLab, yLab],'FontSize', 10) 
+grid on 
+legend("Perturbed Orbit","Osculating Orbit","Initial change in $\omega$","Final change in $\omega$", 'interpreter','latex','Location', 'best')
+
+breakpoint = 1;
 
 
+%%%%% END PRETTY PLOTS 
 
 for i = 1:length(overallState)
     [r_temp,v_temp] = COES2RandV(overallState(i,1),overallState(i,2),overallState(i,5),overallState(i,4),overallState(i,6),overallState(i,3),mu);

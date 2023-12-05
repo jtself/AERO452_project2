@@ -41,7 +41,6 @@ jd = jd_epoch + time/(60*60*24);
 r_S = planetEphemeris(jd,'Mars','Sun');
 r_S = r_S';
 
-
 %% Build Qxx Rotaion Matrix (ECI --> LVLH)
 R_hat = rVect/r;
 N_hat = cross(rVect,vVect)/norm(cross(rVect,vVect));
@@ -64,7 +63,6 @@ acc_SolarGravity = muSun*(F*r_S - rVect)/(norm(r_S_SC)^3);
 acc_SolarGravity = Qxr*acc_SolarGravity;
 
 %% Find SRP Pertubation
-
 thetaB = acos(rm/r);
 thetaA = acos(rm/r_S);
 theta = acos(dot(r_S,rVect)/(norm(r_S)*r));
@@ -77,7 +75,6 @@ end
 
 acc_SRP = -(1000)*Psr*Cr*area*(1/mass)*(r_S)*(1/norm(r_S))*F;
 acc_SRP = Qxr*acc_SRP;
-
 
 %% Find J2-J3 Pertubation
 

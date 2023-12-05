@@ -1,17 +1,30 @@
 % Housekeeping
 clear all; close all; clc;
 
+%{
+        |
+       / \
+      / _ \
+     |.o '.|
+     |'._.'|
+     |     |
+   ,'|  |  |`.
+  /  |  |  |  \
+  |,-'--|--'-.| 
+
+%}
+
 % Add Path
 addpath("Functions\")
 
 % Governing Constants
 rm = 3396;                         % km
 mu = 42828;                        % km3/s2
-wMars = [0;0;0.0000708907088544]; % rad/s
+wMars = [0;0;0.0000708907088544];   % rad/s
 muSun = 132.712e9;                 % km3/s2
 
 
-UTC = "12/04/2023 00:00:00"; % UTC
+UTC = "2/04/2024 00:00:00"; % UTC
 jd_epoch = juliandate(datetime(UTC,"Format","MM/dd/uuuu HH:mm:ss"));
 
 mass = 1031;                  % kg
@@ -45,18 +58,73 @@ for i = 1:length(state)
     a = (h^2)/(mu*(1-ecc^2));
     ra(i) = a + a*ecc;
     rp(i) = 2*a - ra(i);
+    
+    % find eclipse
+    jd = jd_epoch + time(i)/86400;
+    r_S = planetEphemeris(jd,'Mars','Sun');
+    r_S = r_S';
+    nu(i) = checkeclipse(r_temp,r_S,rm);
 end
+nu = nu';
+% should give us a nu vect (all the eclipse indices)
 
+
+% eclipse times
+
+% Batch all eclipse indices together
+for i = 1:(length(nu)-1)
+    if nu(i) - nu(i+1) > 0
+        eclipseDuration.index(i) = (i+1);
+    elseif nu(i) - nu(i+1) < 0
+        eclipseDuration.index(i) = (i);
+    end % if
+end % for
+%%
+% All eclipse enter and exit times
+x = nonzeros(eclipseDuration.index);
+A = zeros(length(x)-1);
+for i = 1:2:(length(x)-1)
+    A(i) = time(x(i+1)) - time(x(i));
+end
+% Time s/c is in eclipse
+A = sum(nonzeros(A));
+disp("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+disp("Time s/c is in eclipse: " + A + " days <------------------------") % days
+disp("Percent of time s/c is in eclipse (of 50 day mission): " + 100*A/50 + " percent <------------------------")
+%%
+% Plot eclipse times visually (dots)
+figure()
+plot(time,nu,'*', 'LineWidth',1) % days
+% Graph pretty 
+ylim padded 
+xlim tight 
+xLab = xlabel('Mission time [days]','Interpreter','latex'); 
+yLab = ylabel('Eclipse (1) or not (0)','Interpreter','latex'); 
+plotTitle = title('Times s/c is in eclipse','interpreter','latex'); 
+set(plotTitle,'FontSize',14,'FontWeight','bold') 
+set(gca,'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontName','Palatino Linotype') 
+set([xLab, yLab],'FontSize', 14) 
+grid on 
+
+% plot eclipse dots in MCI
+% Pretty MARS PLOT
 figure
-background('Stars')
+background('Milky Way')
 hold on
 ax = gca;
 opts.Units = 'km';
 planet3D('Mars',opts)
-plot3(r(:,1),r(:,2),r(:,3),'.')
+plot3(r(:,1),r(:,2),r(:,3),'--')
 plot3(r(1,1),r(1,2),r(1,3),'*','LineWidth',5)
 plot3(r(end,1),r(end,2),r(end,3),'*','LineWidth',5)
-lgd = legend("Mars","Orbital Path","Start Position","End Position",'Location','southoutside');
+
+% ECLIPSE LOCATION
+eclipseYes = find(~nu);
+p3 = plot3(r(eclipseYes,1),r(eclipseYes,2),r(eclipseYes,3),'*','Linewidth',2);
+p3.Color='g';
+
+lgd = legend("Mars","Orbital Path","Start Position","End Position","ECLIPSE",'Location','southoutside');
 lgd.NumColumns = 2;
 xlabel("X [Km]")
 ylabel("Y [Km]")

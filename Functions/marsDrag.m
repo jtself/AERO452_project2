@@ -1,6 +1,6 @@
 function [rho] = marsDrag(altitude)
 
-if altitude > 1000
+if altitude > 990
     rho = 0;
 else
 

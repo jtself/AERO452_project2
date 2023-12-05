@@ -1,7 +1,7 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function [lamda eps r_S] = solar_position(jd)
 %
-% This function alculates the geocentric equatorial position vector
+% This function calculates the geocentric equatorial position vector
 % of the sun, given the julian date.
 %
 % User M-functions required: None
